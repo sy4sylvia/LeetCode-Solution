@@ -5,20 +5,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LCAofBT {
+//    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+//        return postOrder(root, p, q);
+//    }
+//
+//    private TreeNode postOrder(TreeNode root, TreeNode p, TreeNode q) {
+//        if (root == null || root == p || root == q) return root;
+//        TreeNode leftTree = postOrder(root.left, p, q);
+//        TreeNode rightTree = postOrder(root.right, p, q);
+//
+//        if (leftTree != null && rightTree != null) return root;
+//        if (leftTree == null) return rightTree;
+//        else return leftTree; //rightTree == null
+//    }
+
+
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return postOrder(root, p, q);
-    }
-
-    private TreeNode postOrder(TreeNode root, TreeNode p, TreeNode q) {
         if (root == null || root == p || root == q) return root;
-        TreeNode leftTree = postOrder(root.left, p, q);
-        TreeNode rightTree = postOrder(root.right, p, q);
-
-        if (leftTree != null && rightTree != null) return root;
-        if (leftTree == null) return rightTree;
-        else return leftTree; //rightTree == null
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+//        if (left != null & right != null) return root;
+//        if (left != null) return left;
+//        else return right;
+        return left == null ? right : right == null ? left : root;
     }
-
 
 
 //    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
