@@ -10,29 +10,31 @@ public class DecodeString {
         Stack<Integer> countStack = new Stack<>();
         Stack<String> stringStack = new Stack<>();
         int idx = 0;
-        char[] c = s.toCharArray();
         while (idx < s.length()) {
-            if (Character.isDigit(c[idx])) {
+            if (Character.isDigit(s.charAt(idx))) {
                 int count = 0;
-                while (Character.isDigit(c[idx])) {
-                    count = count * 10 + c[idx] - '0';
+                while (Character.isDigit(s.charAt(idx))) {
+                    count = 10 * count + (s.charAt(idx) - '0');
                     idx++;
                 }
                 countStack.push(count);
             }
-            else if (c[idx] == '[') {
+            else if (s.charAt(idx) == '[') {
                 stringStack.push(ans);
                 ans = "";
                 idx++;
             }
-            else if (c[idx] == ']') {
+            else if (s.charAt(idx) == ']') {
                 StringBuilder tmp = new StringBuilder(stringStack.pop());
                 int repeatTimes = countStack.pop();
                 for (int i = 0; i < repeatTimes; i++) tmp.append(ans);
                 ans = tmp.toString();
                 idx++;
             }
-            else ans += c[idx++];
+            else {
+                ans += s.charAt(idx);
+                idx++;
+            }
         }
         return ans;
     }
