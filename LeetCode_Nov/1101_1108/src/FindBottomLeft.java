@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Queue;
 
 public class FindBottomLeft {
-
     //BFS
 
     public int findBottomLeftValue(TreeNode root) {
