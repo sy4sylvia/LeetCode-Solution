@@ -5,34 +5,24 @@ import java.util.*;
 
 public class CarPooling {
     public boolean carPooling(int[][] trips, int capacity) {
-
-//        Arrays.sort(trips, Comparator.comparingDouble(o -> o[1]));
-        // trips = [[2,1,5],
-        //         [3,3,7]]
-
-//        Queue<int[]> wait = new LinkedList<>(); //according to start
-//        for (int i = 0; i < trips.length; i++) {
-//            wait.offer(trips[i]);
-//        }
-
-        PriorityQueue<int[]> wait = new PriorityQueue<>(Comparator.comparingInt(o -> o[1]));
+        PriorityQueue<int[]> wait = new PriorityQueue<>(Comparator.comparingDouble(o -> o[1]));
         for (int[] t : trips) wait.offer(t);
 
         PriorityQueue<int[]> loaded = new PriorityQueue<>(Comparator.comparingDouble(o -> o[2]));
-        loaded.offer(trips[0]);
+        loaded.offer(wait.poll());
+        capacity -= loaded.peek()[0];
+        if (capacity < 0) return false;
 
         while (!wait.isEmpty()) {
-            if (wait.peek()[1] >= loaded.peek()[2]) {
+            while (!loaded.isEmpty() && wait.peek()[1] >= loaded.peek()[2]) {
                 capacity += loaded.poll()[0];
-//                loaded.poll();
             }
+            loaded.offer(wait.peek());
+            capacity -= wait.poll()[0];
 
-            if (capacity >= 0) {
-                loaded.offer(wait.peek());
-                capacity -= wait.poll()[0];
-            }
+            if (capacity < 0) return false;
         }
-        return capacity >= 0;
+        return true;
     }
 
     public static void main(String[] args) {
