@@ -1,4 +1,6 @@
 
+import javax.management.relation.RoleNotFoundException;
+import javax.swing.plaf.synth.SynthLookAndFeel;
 import java.math.BigInteger;
 import java.util.*;
 
@@ -67,6 +69,43 @@ class Solution {
         }
         return x.toString(2);
     }
+
+
+    //200 Number of Islands
+
+    public int numIslands(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int num = 0;
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                if (grid[r][c] == '1') {
+                    num++;
+                    grid[r][c] = '0'; //mark as visited
+                    Queue<int[]> neighbors = new LinkedList<>();
+                    neighbors.offer(new int[]{r, c});
+
+                    int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+                    while (!neighbors.isEmpty()) {
+                        int[] cur = neighbors.poll();
+                        for (int[] d : dirs) {
+                            int row = cur[0] + d[0];
+                            int col = cur[1] + d[1];
+                            if (row < 0 || row >= m || col < 0 || col >= n) continue;
+                            if (grid[row][col] =='1') { //not visited yet
+                                grid[row][col] = '0';
+                                neighbors.offer(new int[]{row, col});
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+        return num;
+    }
+
 
     //0110
     //323. Number of Connected Components in an Undirected Graph
@@ -138,28 +177,7 @@ class Solution {
 
     //0110
     //79 Word Search
-//    public boolean exist(char[][] board, String word) {
-//        char[] w = word.toCharArray();
-//        for (int y=0; y<board.length; y++) {
-//            for (int x=0; x<board[y].length; x++) {
-//                if (exist(board, y, x, w, 0)) return true;
-//            }
-//        }
-//        return false;
-//    }
-//
-//    private boolean exist(char[][] board, int y, int x, char[] word, int i) {
-//        if (i == word.length) return true;
-//        if (y<0 || x<0 || y == board.length || x == board[y].length) return false;
-//        if (board[y][x] != word[i]) return false;
-//        board[y][x] ^= 256;
-//        boolean exist = exist(board, y, x+1, word, i+1)
-//                || exist(board, y, x-1, word, i+1)
-//                || exist(board, y+1, x, word, i+1)
-//                || exist(board, y-1, x, word, i+1);
-//        board[y][x] ^= 256;
-//        return exist;
-//    }
+    //    }
     public boolean exist(char[][] board, String word) {
         int m = board.length;
         int n = board[0].length;
@@ -299,31 +317,6 @@ class Solution {
         return sum;
     }
 
-//    private static int count(String word) {
-//        if (word.length() == 1) return 1;
-//
-//        int sum = 0;
-//
-//        for (int pivot = 0; pivot < word.length() - 1; pivot++) {
-//            if (word.charAt(pivot) != word.charAt(0)) continue;
-//
-//            //letter at pivot == letter at 0
-//            int curSum = 0;
-//            int right = pivot + 1;
-//            int idx = 1;
-//            while (right < word.length() && idx < word.length() && word.charAt(right) == word.charAt(idx)) {
-//                right++;
-//                idx++;
-//            }
-//            curSum = right - pivot;
-////            if (right == word.length() && word.charAt(0) == word.charAt(word.length() - 1)) curSum++;
-//            sum += curSum;
-//        }
-//        if (word.charAt(0) == word.charAt(word.length() - 1)) sum++;
-//
-//        return sum;
-//    }
-
 
     //0113
     //498. Diagonal Traverse
@@ -381,7 +374,7 @@ class Solution {
                 for (int i = rightBound - 1; i >= leftBound; i--) res.add(matrix[bottomBound][i]); // go left 8, 7
             }
             if (leftBound != rightBound) {
-                for (int i = bottomBound -1; i > topBound; i--) res.add(matrix[i][leftBound]); //go up 4
+                for (int i = bottomBound - 1; i > topBound; i--) res.add(matrix[i][leftBound]); //go up 4
             }
             leftBound++;
             rightBound--;
@@ -389,44 +382,8 @@ class Solution {
             bottomBound--;
         }
         return res;
-
-
-//        for (int i = 0; i < m * n; i++) {
-//            if (leftBound != rightBound && upBound != bottomBound) {
-//
-//            res.add(matrix[row][col]);
-//            if (count == 1) { //go right
-//                if (col != rightBound) col++;
-//                else { //reach right boundary
-//                    count++; //count = 2;
-//                    rightBound--;
-//                }
-//            }
-//            if (count == 2) { //go down
-//                if (row != bottomBound) row++;
-//                else {
-//                    count++; //reach the bottom
-//                    bottomBound--;
-//                }
-//            }
-//            if (count == 3) { //go left
-//                if (col != leftBound) col--;
-//                else {
-//                    count++;
-//                    leftBound++;
-//                }
-//            }
-//            if (count == 4) { // go up
-//                if (row != upBound) row--;
-//                else {
-//                    count++;
-//                    upBound++;
-//                }
-//            }
-//            if (count > 4) count -= 4;
-//        }
-
     }
+
 
     //0113
     //Pascal's Triangle
@@ -552,13 +509,288 @@ class Solution {
         else return min;
     }
 
+    //0114
+    //Rotate Array
+    public void rotate(int[] nums, int k) {
+        int length = nums.length;
+        int[] tmp = new int[length];
+        for (int i = 0; i < k; i++) tmp[i] = nums[length - k + i];
+//        for (int j = 0; j < length - k; j++) tmp[j + k] = nums[j];
+        for (int i = k; i < length; i++) tmp[i] = nums[i - k];
+        System.arraycopy(tmp, 0, nums, 0, length);
+    }
+
+    //0114
+    //Reverse Words in a String
+
+    //1 <= s.length <= 104
+    public String reverseWords(String s) {
+        List<String> tmp = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != ' ') {
+                sb.append(s.charAt(i));
+                if (i == s.length() - 1) tmp.add(sb.toString()); //add the last word when no more spaces
+            }
+            else {
+                //cur char is space
+                if (sb.length() != 0) { //if empty, meaning duplicate spaces
+                    tmp.add(sb.toString());
+                    sb = new StringBuilder();
+                }
+            }
+        }
+        Collections.reverse(tmp);
+        StringBuilder ans = new StringBuilder();
+
+        for (String t : tmp) {
+            ans.append(t);
+            ans.append(' ');
+        }
+        ans.deleteCharAt(ans.length() - 1);
+        return ans.toString();
+    }
+
+
+    // Reverse Words in a String III
+    public String reverseWords3(String s) {
+        List<String> wordL = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != ' ') {
+                sb.append(s.charAt(i));
+                if (i == s.length() - 1) {
+                    sb.reverse();
+                    wordL.add(sb.toString());
+                }
+            }
+            else {
+                sb.reverse();
+                wordL.add(sb.toString());
+                sb = new StringBuilder();
+            }
+        }
+
+        return wordL.toString();
+    }
+
+
+    //move zeroes
+    public void moveZeroes(int[] nums) {
+        //maintain relative order
+        int left = 0;
+        for (int right = 0; right < nums.length; right++) {
+            if (nums[right] != 0) {
+                nums[left++] = nums[right];
+            }
+        }
+        for (int i = left; i < nums.length; i++) nums[i] = 0;
+    }
+
+    //567. Permutation in String
+
+
+    public boolean checkInclusion(String s1, String s2) {
+        if (s1.length() > s2.length()) return false;
+
+        int[] table1 = new int[26];
+        int[] table2 = new int[26];
+        for (int i = 0; i < s1.length(); i++) {
+            table1[s1.charAt(i) - 'a']++;
+            table2[s2.charAt(i) - 'a']++;
+        } //fill in hash table according to s1's chars
+
+        for (int i = s1.length(); i < s2.length(); i++) {
+            if (match(table1, table2)) return true;
+            table2[s2.charAt(i) - 'a']++;
+            table2[s2.charAt(i - s1.length()) - 'a']--; //update the rest of the table according to s2
+        }
+
+        return match(table1, table2);
+    }
+    private boolean match(int[] t1, int[] t2) {
+        for (int i = 0; i < 26; i++) {
+            if (t1[i] != t2[i]) return false;
+        }
+        return true;
+    }
+
+    //849. Maximize Distance to Closest Person
+    public int maxDistToClosest(int[] seats) {
+
+        List<Integer> indices = new ArrayList<>();
+
+        for (int i = 0; i < seats.length; i++) {
+            if (seats[i] == 1) indices.add(i); //note down indices of 1
+        }
+
+        if (indices.size() == 1) return Math.max(indices.get(0), seats.length - 1 - indices.get(0));
+
+        int[] dis = new int[indices.size() - 1];
+        for (int i = 0; i < dis.length; i++) dis[i] = indices.get(i + 1) - indices.get(i);
+        Arrays.sort(dis);
+
+        int res = dis[dis.length - 1] / 2;
+
+        if (seats[0] == 0) res = Math.max(res, indices.get(0));
+        if (seats[seats.length - 1] == 0) res = Math.max(res, seats.length - 1 - indices.get(indices.size() - 1));
+
+        return res;
+    }
+
+    //0116
+    //286. Walls and Gates
+    public void wallsAndGates(int[][] rooms) {
+        //modify original matrix
+        int m = rooms.length;
+        int n = rooms[0].length;
+
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) visited[i][j] = false;
+        }
+
+        List<int[]> gates = new ArrayList<>(); //find all gates
+        Queue<int[]> q = new LinkedList<>();
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                if (rooms[r][c] == 0) {
+                    visited[r][c] = true;
+                    q.offer(new int[]{r, c}); //add multiple scrs to the q
+                }
+            }
+        }
+
+        if (q.isEmpty()) return; //no gates, no modifying
+
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            for (int[] dir : dirs) {
+                int row = cur[0] + dir[0];
+                int col = cur[1] + dir[1];
+                if (row < 0 || row >= m || col < 0 || col >= n) continue;
+                if (!visited[row][col]) {
+                    visited[row][col] = true; // visited
+                    if (rooms[row][col] == 2147483647) {
+                        q.offer(new int[] {row, col});
+                        rooms[row][col] = rooms[cur[0]][cur[1]] + 1;
+                    }
+                }
+            }
+        }
+    }
+
+    //290. Word Pattern
+    public boolean wordPattern(String pattern, String s) {
+        String[] word = s.split(" ");
+        if (pattern.length() != word.length) return false;
+
+        HashMap<Character, String> hm = new HashMap<>();
+        for (int i = 0; i < pattern.length(); i++) {
+            if (!hm.containsKey(pattern.charAt(i)) && !hm.containsValue(word[i])) {
+                hm.put(pattern.charAt(i), word[i]);
+            }
+        }
+
+        for (int i = 0; i < word.length; i++) {
+            if (!word[i].equals(hm.get(pattern.charAt(i)))) return false;
+        }
+
+        return true;
+    }
+
+
+    //1338. Reduce Array Size to The Half
+    public int minSetSize(int[] arr) {
+        if (arr.length == 1) return 1;
+        Arrays.sort(arr);
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparing(o -> -o[1]));
+        //pq: 3, 4; 5, 3; 2, 2; 7, 1
+        int count = 1;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i - 1] != arr[i]) {
+                pq.offer(new int[] {arr[i - 1], count});
+                count = 1;
+            }
+            else {
+                count++;
+            }
+        }
+        pq.offer(new int[] {arr[arr.length - 1], count});
+
+        if (pq.isEmpty()) return 1;
+
+        int size = arr.length, setSize = 0;
+        while (size > arr.length / 2 && !pq.isEmpty()) {
+            size -= pq.poll()[1];
+            setSize++;
+        }
+        return setSize;
+
+    }
+
+    //279 Perfect Square
+    public int numSquares(int n) {
+        Queue<Integer> q = new LinkedList<>();
+        Set<Integer> visited = new HashSet<>();
+
+        q.offer(0);
+        visited.add(0);
+
+        int depth = 0;
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            depth++;
+
+            while (size > 0) {
+                int remainder = q.poll();
+                for (int i = 1; i * i <= n; i++) {
+                    int curNum = remainder + i * i;
+                    if (curNum == n) return depth;
+                    if (curNum > n) break;
+                    if (!visited.contains(curNum)) {
+                        q.offer(curNum);
+                        visited.add(curNum);
+                    }
+                }
+                size--;
+            }
+        }
+        return depth;
+    }
+
+//        int[] square = new int[(int) Math.sqrt(n)];
+//        for (int i = 1; i < square.length; i++) square[i] = i * i;
+//
+//        Set<Integer> hs = new HashSet<>();
+//        hs.add(n); //first level, root
+//
+//        int level = 0;
+//        while (!hs.isEmpty()) {
+//            level += 1;
+//            Set<Integer> nextQ = new HashSet<>();
+//            for (Integer remainder : hs) {
+//                for (int sq : square) {
+//                    if (remainder.equals(sq)) return level;
+//                    else if (remainder < sq) break;
+//                    else nextQ.add(remainder - sq);
+//                }
+//            }
+//            hs = nextQ; //get to the next level's q
+//        }
+//        return level;
+//    }
+
 
     public static void main(String[] args) {
         Solution s = new Solution();
-        String haystack = "hello", needle = "o";
+        String[] deadends = new String[] {"0201","0101","0102","1212","2002"};
+        String target = "0202";
 
-        int target = 7;
-        int[] nums = {2,3,1,2,4,3};
-        System.out.println(s.minSubArrayLen(target, nums));
     }
 }
