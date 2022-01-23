@@ -3,6 +3,45 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class QueueBFS {
+
+    public void wallsAndGates(int[][] rooms) {
+        int m = rooms.length;
+        int n = rooms[0].length;
+
+        Queue<int[]> q = new LinkedList<>();
+        boolean[][] visited = new boolean[m][n];
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                if (rooms[r][c] == 0) {
+                    visited[r][c] = true;
+                    q.offer(new int[]{r, c}); //add multiple scrs to the q
+                }
+                else visited[r][c] = false;
+            }
+        }
+
+        if (q.isEmpty()) return; //no gates, no modifying
+
+        int[][] dirs = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            for (int[] dir : dirs) {
+                int row = cur[0] + dir[0];
+                int col = cur[1] + dir[1];
+                if (row < 0 || row >= m || col < 0 || col >= n) continue;
+                if (!visited[row][col]) {
+                    visited[row][col] = true; // visited
+                    if (rooms[row][col] == 2147483647) {
+                        q.offer(new int[] {row, col});
+                        rooms[row][col] = rooms[cur[0]][cur[1]] + 1;
+                    }
+                }
+            }
+        }
+    }
+
     //752. Open the Lock
 
     //use DFS and search for the target, then compare to get the shortest path, likely to get TLE

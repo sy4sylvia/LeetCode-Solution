@@ -389,7 +389,6 @@ class Solution {
     //Pascal's Triangle
     public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> pascal = new ArrayList<>();
-
         //base case, 1st level:
         pascal.add(new ArrayList<>());
         pascal.get(0).add(1);
@@ -407,6 +406,33 @@ class Solution {
             pascal.add(level);
         }
         return pascal;
+    }
+
+    //Pascal's Triangle II
+    public List<Integer> getRow(int rowIndex) {
+//        List<Integer> row = new ArrayList<>(rowIndex + 1);
+        int[] rows = new int[rowIndex + 1];
+        rows[0] = 1; // base case
+        for (int i = 0; i < rowIndex; i++) {
+            for (int j = i; j > 0; j--) {
+                rows[j] = rows[j] + rows[j - 1];
+            }
+            rows[i] = 1;
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int r : rows) res.add(r);
+        return res;
+
+        //dp
+//        List<Integer> row = new ArrayList<>(rowIndex + 1); //size of worIndex + 1
+//        row.add(1); //1st row, base case
+//        for (int i = 0; i < rowIndex; i++) {
+//            for (int j = i; j > 0; j--) {
+//                row.set(j, row.get(j) + row.get(j - 1));
+//            }
+//            row.add(1); //add 1 to the last position
+//        }
+//        return row;
     }
 
     //28. Implement strStr()
@@ -787,10 +813,60 @@ class Solution {
 //    }
 
 
+    //259. 3Sum Smaller
+    public int threeSumSmaller(int[] nums, int target) {
+        if (nums.length < 3) return 0;
+        else if (nums.length == 3 && nums[0] + nums[1] + nums[2] >= target) return 0;
+        else {
+            Arrays.sort(nums);
+            int count = 0;
+
+            for (int idx = 0; idx < nums.length - 2; idx++) {
+                int left = idx + 1, right = nums.length - 1;
+                while (left < right) {
+                    if (nums[idx] + nums[left] + nums[right] < target) {
+                        count += right - left; //combinations across the arr from left to right
+                        left++;
+                    }else right--;
+                }
+            }
+            return count;
+        }
+    }
+
+
+    //16 3Sum Closest
+    //not necessarily adjacent
+
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums); //nums = [0, 2, 1, -3] -> [-3, 0, 1, 2]
+
+        int minDiff = Integer.MAX_VALUE;
+
+        for (int idx = 0; idx < nums.length && minDiff != 0; idx++) {
+            int left = idx + 1, right = nums.length - 1;
+            while (left < right) {
+                int curSum = nums[idx] + nums[left] + nums[right];
+                if (Math.abs(target - curSum) < Math.abs(minDiff)) minDiff = target - curSum;
+
+                if (curSum < target) left++;
+                else if (curSum == target) return curSum; //this is the closest to target
+                else right--;
+            }
+        }
+        return target - minDiff;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solution s = new Solution();
         String[] deadends = new String[] {"0201","0101","0102","1212","2002"};
-        String target = "0202";
+//        String target = "0202";
 
+        int[] nums = {0,2,1,-3};
+        int target = 1;
+        System.out.println(s.threeSumClosest(nums, target));
     }
 }
