@@ -127,5 +127,10 @@ public class Daily {
         int[] piles = {3,6,7,11};
         int h = 8;
         System.out.println(d.minEatingSpeed(piles, h));
+
+        String address = "1257899";
+
+        int val = Integer.parseInt(address.substring(0, 3));
+        System.out.println();
     }
 }
