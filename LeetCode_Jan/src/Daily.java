@@ -119,18 +119,36 @@ public class Daily {
 
 
 
+    //2133 Check if Every Row and Column Contains All Numbers
+
+    public boolean checkValid(int[][] matrix) {
+        for (int row = 0; row < matrix.length; row++) {
+            HashSet<Integer> hsRow = new HashSet<>();
+            HashSet<Integer> hsCol = new HashSet<>();
+            //contains all the integers from 1 to n (inclusive).
+            for (int col = 0; col < matrix.length; col++) {
+                if (!hsRow.add(matrix[row][col]) || !hsCol.add(matrix[row][col])) {
+                    return false;
+                }//if hashSets don't add cur num, doesnt contain all ints from 1 to n
+            }
+        }
+
+        for (int col = 0; col < matrix[0].length; col++) {
+            HashSet<Integer> hsRow = new HashSet<>();
+            HashSet<Integer> hsCol = new HashSet<>();
+            //contains all the integers from 1 to n (inclusive).
+            for (int row = 0; row < matrix.length; row++) {
+                if (!hsRow.add(matrix[row][col]) || !hsCol.add(matrix[row][col])) {
+                    return false;
+                }//if hashSets don't add cur num, doesnt contain all ints from 1 to n
+            }
+        }
+        return true;
+    }
 
     public static void main(String[] args) {
         Daily d = new Daily();
-        int[] flowerbed = {0, 0, 0, 0, 0};
-        int n = 3;
-        int[] piles = {3,6,7,11};
-        int h = 8;
-        System.out.println(d.minEatingSpeed(piles, h));
-
-        String address = "1257899";
-
-        int val = Integer.parseInt(address.substring(0, 3));
-        System.out.println();
+        int[][] matrix = {{1, 2, 3}, {1, 2, 3}, {3, 2, 1}};
+        System.out.println(d.checkValid(matrix));
     }
 }

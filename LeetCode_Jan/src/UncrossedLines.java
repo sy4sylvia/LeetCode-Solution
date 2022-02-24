@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class UncrossedLines {
     public int maxUncrossedLines(int[] nums1, int[] nums2) {
         int m = nums1.length, n = nums2.length;
